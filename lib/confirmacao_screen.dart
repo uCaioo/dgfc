@@ -31,24 +31,6 @@ class ConfirmacaoScreen extends StatelessWidget {
   });
 
 
-  // Função para fazer upload da imagem para o Firebase Storage
-  Future<String> uploadImageAndGetUrl(Uint8List imageBytes, String imageName) async {
-    String imageUrl = '';
-
-    try {
-      Reference storageReference = FirebaseStorage.instance.ref().child('assinaturas').child(imageName);
-      UploadTask uploadTask = storageReference.putData(imageBytes);
-      await uploadTask.whenComplete(() => null);
-      imageUrl = await storageReference.getDownloadURL();
-    } catch (e) {
-      print('Erro ao fazer upload de imagem: $e');
-    }
-
-    return imageUrl;
-  }
-
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -297,7 +279,25 @@ class ConfirmacaoScreen extends StatelessWidget {
                                   },
                                 );
 
-                                // Verificar se o usuário confirmou
+
+
+                                // Função para fazer upload da imagem para o Firebase Storage
+                                Future<String> uploadImageAndGetUrl(Uint8List imageBytes, String imageName, String documentoNome) async {
+                                  String imageUrl = '';
+
+                                  try {
+                                    Reference storageReference = FirebaseStorage.instance.ref().child('assinaturas').child(documentoNome).child(imageName);
+                                    UploadTask uploadTask = storageReference.putData(imageBytes);
+                                    await uploadTask.whenComplete(() => null);
+                                    imageUrl = await storageReference.getDownloadURL();
+                                  } catch (e) {
+                                    print('Erro ao fazer upload de imagem: $e');
+                                  }
+
+                                  return imageUrl;
+                                }
+
+// Verificar se o usuário confirmou
                                 if (confirm == true) {
                                   // Mostrar a animação de carregamento
                                   showDialog(
@@ -313,14 +313,12 @@ class ConfirmacaoScreen extends StatelessWidget {
                                   );
 
                                   try {
+                                    // Criar um nome único para o documento (com base no nome do responsável e um timestamp)
+                                    String documentoNome = '${nomeResponsavel}_${DateTime.now().millisecondsSinceEpoch}';
+
                                     // Upload das assinaturas para o Firebase Storage
-
-
-                                    final responsavelImageUrl = await uploadImageAndGetUrl(assinatura, 'assinatura_responsavel.png');
-                                    final fiscalImageUrl = await uploadImageAndGetUrl(assinatura2, 'assinatura_fiscal.png');
-
-
-
+                                    final responsavelImageUrl = await uploadImageAndGetUrl(assinatura, 'assinatura_responsavel.png', documentoNome);
+                                    final fiscalImageUrl = await uploadImageAndGetUrl(assinatura2, 'assinatura_fiscal.png', documentoNome);
 
                                     // Criar mapa de dados para enviar ao Firestore
                                     Map<String, dynamic> data = {
@@ -338,8 +336,6 @@ class ConfirmacaoScreen extends StatelessWidget {
                                     // Referência à coleção "cadastros"
                                     CollectionReference cadastros = FirebaseFirestore.instance.collection('cadastros');
 
-                                    // Criar um nome único para o documento (com base no nome do responsável e um timestamp)
-                                    String documentoNome = '${nomeResponsavel}_${DateTime.now().millisecondsSinceEpoch}';
                                     // Criar o documento com o nome único
                                     DocumentReference cadastroRef = cadastros.doc(documentoNome);
 

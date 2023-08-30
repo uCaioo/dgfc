@@ -67,23 +67,43 @@ class LixeiraScreen extends StatelessWidget {
             ],
           ),
         ),
-        subtitle: RichText(
-          text: TextSpan(
-            text: 'Matrícula: ',
-            style: TextStyle(
-              color: Color(0xFF666666),
-            ),
-            children: [
-              TextSpan(
-                text: item['matricula'] ?? 'N/A',
+        subtitle: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            RichText(
+              text: TextSpan(
+                text: 'Matrícula: ',
                 style: TextStyle(
                   color: Color(0xFF666666),
                 ),
+                children: [
+                  TextSpan(
+                    text: item['matricula'] ?? 'N/A',
+                    style: TextStyle(
+                      color: Color(0xFF666666),
+                    ),
+                  ),
+                ],
               ),
-            ],
-          ),
+            ),
+            RichText(
+              text: TextSpan(
+                text: 'Órgão: ',
+                style: TextStyle(
+                  color: Color(0xFF666666),
+                ),
+                children: [
+                  TextSpan(
+                    text: item['para'] ?? 'N/A', // Substitua pelo nome do campo correto
+                    style: TextStyle(
+                      color: Color(0xFF666666),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
         ),
-
         onTap: () {
           _showTrashItemOptions(context, item);
         },
@@ -99,6 +119,7 @@ class LixeiraScreen extends StatelessWidget {
       ),
     );
   }
+
 
   void _showTrashItemOptions(BuildContext context, Map<String, dynamic> item) {
     showDialog(

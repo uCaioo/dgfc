@@ -133,13 +133,11 @@ class RelatorioScreen extends StatelessWidget {
               },
               child: Text('Visualizar PDF', style: TextStyle(color: Color(0xFF43AD59))),
             ),
-
           ],
         );
       },
     );
   }
-
 
   Widget _buildDetailRow(String label, String? value) {
     return Padding(
@@ -234,19 +232,73 @@ class RelatorioScreen extends StatelessWidget {
   Future<pw.Document> generatePdf(Map<String, dynamic> data) async {
     final pdf = pw.Document();
 
+    final headerImagePath = 'assets/images/Sead_Sup.png';
+    final footerImagePath = 'assets/images/Sead_inf.png';
+
+    final headerImage = pw.MemoryImage(File(headerImagePath).readAsBytesSync());
+    final footerImage = pw.MemoryImage(File(footerImagePath).readAsBytesSync());
+
     pdf.addPage(
       pw.Page(
         build: (pw.Context context) {
-          return pw.Center(
-            child: pw.Text('Nome do Responsável: ${data['nomeResponsavel'] ?? 'N/A'}'),
+          return pw.Column(
+            crossAxisAlignment: pw.CrossAxisAlignment.start,
+            children: [
+              // Cabeçalho personalizado com imagem
+              pw.Container(
+                alignment: pw.Alignment.centerLeft,
+                child: pw.Image(headerImage),
+              ),
+              pw.SizedBox(height: 20), // Espaçamento entre cabeçalho e conteúdo
+
+              pw.Header(
+                level: 0,
+                child: pw.Row(
+                  mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+                  children: [
+                    pw.Text('Cabeçalho do Relatório'),
+                    pw.Text('Data: ${DateTime.now().toString()}'),
+                  ],
+                ),
+              ),
+              _buildDetailText('Detalhes do Cadastro', ''),
+              _buildDetailText('Nome do Responsável', data['nomeResponsavel'] ?? 'N/A'),
+              _buildDetailText('Emissor', data['emissor']),
+              _buildDetailText('Para', data['para']),
+              _buildDetailText('Unidade Recebedora', data['unidadeRecebedora']),
+              _buildDetailText('Cidade', data['cidade']),
+              // Adicione mais detalhes conforme necessário
+
+              pw.SizedBox(height: 20), // Espaçamento entre conteúdo e rodapé
+              // Rodapé personalizado com imagem
+              pw.Container(
+                alignment: pw.Alignment.centerRight,
+                child: pw.Image(footerImage),
+              ),
+            ],
           );
         },
       ),
     );
 
-    // ... Adicione mais conteúdo conforme necessário ...
+    // ... Continue adicionando mais páginas e conteúdo conforme necessário ...
 
     return pdf;
+  }
+
+  pw.Widget _buildDetailText(String label, String? value) {
+    return pw.Padding(
+      padding: pw.EdgeInsets.symmetric(vertical: 4.0),
+      child: pw.RichText(
+        text: pw.TextSpan(
+          style: pw.TextStyle(fontSize: 14.0),
+          children: [
+            pw.TextSpan(text: '$label: ', style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
+            pw.TextSpan(text: value ?? 'N/A'),
+          ],
+        ),
+      ),
+    );
   }
 
   Future<File> savePdf(pw.Document pdf) async {
@@ -310,8 +362,6 @@ class RelatorioScreen extends StatelessWidget {
                 ),
               ),
             )
-
-
           ],
         ),
       ),

@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:path_provider/path_provider.dart';
-import 'package:pdf/widgets.dart' as pw;
-import 'package:open_file/open_file.dart';
-import 'dart:io';
+
 
 class RelatorioScreen extends StatelessWidget {
   void _showReports(BuildContext context) {
@@ -125,11 +122,7 @@ class RelatorioScreen extends StatelessWidget {
             TextButton(
               onPressed: () async {
                 // Gerar PDF e salvar em um arquivo
-                final pdf = await generatePdf(data);
-                final pdfFile = await savePdf(pdf);
 
-                // Abrir o PDF
-                await openPdf(pdfFile.path);
               },
               child: Text('Visualizar PDF', style: TextStyle(color: Color(0xFF43AD59))),
             ),
@@ -229,93 +222,6 @@ class RelatorioScreen extends StatelessWidget {
     });
   }
 
-  Future<pw.Document> generatePdf(Map<String, dynamic> data) async {
-    final pdf = pw.Document();
-
-    final headerImagePath = 'assets/images/Sead_Sup.png';
-    final footerImagePath = 'assets/images/Sead_inf.png';
-
-    final headerImage = pw.MemoryImage(File(headerImagePath).readAsBytesSync());
-    final footerImage = pw.MemoryImage(File(footerImagePath).readAsBytesSync());
-
-    pdf.addPage(
-      pw.Page(
-        build: (pw.Context context) {
-          return pw.Column(
-            crossAxisAlignment: pw.CrossAxisAlignment.start,
-            children: [
-              // Cabeçalho personalizado com imagem
-              pw.Container(
-                alignment: pw.Alignment.centerLeft,
-                child: pw.Image(headerImage),
-              ),
-              pw.SizedBox(height: 20), // Espaçamento entre cabeçalho e conteúdo
-
-              pw.Header(
-                level: 0,
-                child: pw.Row(
-                  mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
-                  children: [
-                    pw.Text('Cabeçalho do Relatório'),
-                    pw.Text('Data: ${DateTime.now().toString()}'),
-                  ],
-                ),
-              ),
-              _buildDetailText('Detalhes do Cadastro', ''),
-              _buildDetailText('Nome do Responsável', data['nomeResponsavel'] ?? 'N/A'),
-              _buildDetailText('Emissor', data['emissor']),
-              _buildDetailText('Para', data['para']),
-              _buildDetailText('Unidade Recebedora', data['unidadeRecebedora']),
-              _buildDetailText('Cidade', data['cidade']),
-              // Adicione mais detalhes conforme necessário
-
-              pw.SizedBox(height: 20), // Espaçamento entre conteúdo e rodapé
-              // Rodapé personalizado com imagem
-              pw.Container(
-                alignment: pw.Alignment.centerRight,
-                child: pw.Image(footerImage),
-              ),
-            ],
-          );
-        },
-      ),
-    );
-
-    // ... Continue adicionando mais páginas e conteúdo conforme necessário ...
-
-    return pdf;
-  }
-
-  pw.Widget _buildDetailText(String label, String? value) {
-    return pw.Padding(
-      padding: pw.EdgeInsets.symmetric(vertical: 4.0),
-      child: pw.RichText(
-        text: pw.TextSpan(
-          style: pw.TextStyle(fontSize: 14.0),
-          children: [
-            pw.TextSpan(text: '$label: ', style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
-            pw.TextSpan(text: value ?? 'N/A'),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Future<File> savePdf(pw.Document pdf) async {
-    final output = await getTemporaryDirectory();
-    final pdfBytes = await pdf.save();
-    final pdfFile = File('${output.path}/relatorio.pdf');
-    await pdfFile.writeAsBytes(pdfBytes);
-    return pdfFile;
-  }
-
-  Future<void> openPdf(String path) async {
-    final file = File(path);
-    final openResult = await OpenFile.open(file.path);
-    if (openResult.type == ResultType.error) {
-      print('Erro ao abrir o arquivo PDF.');
-    }
-  }
 
   @override
   Widget build(BuildContext context) {

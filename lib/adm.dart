@@ -4,6 +4,8 @@ import 'login.dart';
 import 'package:flutter/services.dart';
 import 'relatorio.dart';
 import 'lixeira.dart';
+import 'dashboard.dart';
+import 'filtro.dart';
 
 
 

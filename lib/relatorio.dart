@@ -1,5 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/services.dart';
+import 'package:open_file/open_file.dart';
+import 'package:path_provider/path_provider.dart';
+import 'dart:io';
+import 'package:flutter/services.dart' show rootBundle;
+import 'package:pdf/pdf.dart';
+import 'package:pdf/widgets.dart' as pw;
 
 
 class RelatorioScreen extends StatelessWidget {
@@ -121,11 +128,11 @@ class RelatorioScreen extends StatelessWidget {
             ),
             TextButton(
               onPressed: () async {
-                // Gerar PDF e salvar em um arquivo
-
+                _generateAndOpenPDF(data); // Chamando a função para gerar e abrir o PDF
               },
               child: Text('Visualizar PDF', style: TextStyle(color: Color(0xFF43AD59))),
             ),
+
           ],
         );
       },
@@ -221,6 +228,161 @@ class RelatorioScreen extends StatelessWidget {
       }
     });
   }
+
+
+// Função para gerar e abrir o PDF
+  Future<void> _generateAndOpenPDF(Map<String, dynamic> data) async {
+    final pdf = pw.Document();
+
+    // Load images from the assets/images directory
+    final headerImage =
+    pw.MemoryImage((await rootBundle.load('assets/images/Sead_Sup.png')).buffer.asUint8List());
+    final footerImage =
+    pw.MemoryImage((await rootBundle.load('assets/images/Sead_inf.png')).buffer.asUint8List());
+
+    // Get the current date and time
+    final currentDate = DateTime.now();
+    final formattedDate =
+        "${currentDate.day} de ${_getMonthName(currentDate.month)} de ${currentDate.year} ${currentDate.hour}:${currentDate.minute}";
+
+    // Load signature images from assets
+    final signatureResponsavel = pw.MemoryImage((await rootBundle.load('assets/images/assinatura_responsavel.png')).buffer.asUint8List());
+    final signatureFiscal = pw.MemoryImage((await rootBundle.load('assets/images/assinatura_fiscal.png')).buffer.asUint8List());
+
+    // Ajuste a escala das imagens para torná-las maiores
+    final double imageScale = 2.0; // Ajuste esse valor conforme necessário
+
+    // Tamanho da fonte para todos os campos
+    final double fieldFontSize = 10.0; // Ajuste esse valor conforme necessário
+
+    // Adicione o cabeçalho à página
+    pdf.addPage(
+      pw.MultiPage(
+        build: (pw.Context context) => [
+          // Adicione o cabeçalho aqui com a escala ajustada
+          pw.Container(
+            alignment: pw.Alignment.center,
+            child: pw.Image(headerImage, width: 300 * imageScale, height: 100 * imageScale),
+          ),
+
+          // Resto do conteúdo do PDF
+          pw.Column(
+            crossAxisAlignment: pw.CrossAxisAlignment.start,
+            children: [
+              pw.Text('Comprovante de Cadastro', style: pw.TextStyle(fontSize: 16.0, fontWeight: pw.FontWeight.bold)),
+              pw.SizedBox(height: 16.0),
+              _buildField('Emissor:', data['emissor'], fontSize: fieldFontSize),
+              _buildField('Para:', data['para'], fontSize: fieldFontSize),
+              _buildField('Unidade Recebedora:', data['unidadeRecebedora'], fontSize: fieldFontSize),
+              _buildField('Cidade:', data['cidade'], fontSize: fieldFontSize),
+              _buildField('Nome do Responsável:', data['nomeResponsavel'], fontSize: fieldFontSize),
+              _buildField('Matrícula:', data['matricula'], fontSize: fieldFontSize),
+              pw.SizedBox(height: 16.0),
+              _buildField('Data e Hora:', formattedDate, fontSize: fieldFontSize),
+              pw.SizedBox(height: 16.0),
+              // Adicione as assinaturas aqui
+              _buildSignature('Assinatura Responsável', signatureResponsavel),
+              _buildSignature('Assinatura Fiscal', signatureFiscal),
+              pw.SizedBox(height: 16.0),
+              _buildVeiculosPDF(data['veiculos'], fontSize: fieldFontSize),
+              pw.SizedBox(height: 16.0),
+              // Adicione o rodapé aqui com a escala ajustada
+              pw.Container(
+                alignment: pw.Alignment.center,
+                child: pw.Image(footerImage, width: 300 * imageScale, height: 100 * imageScale),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+
+    // Salve o PDF em um arquivo temporário
+    final output = await getTemporaryDirectory();
+    final file = File("${output.path}/relatorio.pdf");
+    await file.writeAsBytes(await pdf.save());
+
+    // Abra o PDF no dispositivo
+    await OpenFile.open(file.path);
+  }
+
+  pw.Widget _buildField(String label, String? value, {double fontSize = 10.0}) {
+    return pw.Row(
+      mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+      children: [
+        pw.Text(
+          label,
+          style: pw.TextStyle(fontSize: fontSize, fontWeight: pw.FontWeight.bold),
+        ),
+        pw.Expanded(
+          child: pw.Text(
+            value ?? '-',
+            style: pw.TextStyle(fontSize: fontSize),
+          ),
+        ),
+      ],
+    );
+  }
+
+// Função para obter o nome do mês com base no número do mês
+  String _getMonthName(int month) {
+    final monthNames = [
+      'Janeiro',
+      'Fevereiro',
+      'Março',
+      'Abril',
+      'Maio',
+      'Junho',
+      'Julho',
+      'Agosto',
+      'Setembro',
+      'Outubro',
+      'Novembro',
+      'Dezembro',
+    ];
+    return monthNames[month - 1];
+  }
+
+  pw.Widget _buildVeiculosPDF(List<dynamic>? veiculos, {double fontSize = 10.0}) {
+    if (veiculos == null || veiculos.isEmpty) {
+      return pw.SizedBox();
+    }
+    return pw.Column(
+      crossAxisAlignment: pw.CrossAxisAlignment.start,
+      children: [
+        pw.Text(
+          'Veículos:',
+          style: pw.TextStyle(fontSize: 14.0, fontWeight: pw.FontWeight.bold),
+        ),
+        for (final veiculo in veiculos)
+          pw.Column(
+            crossAxisAlignment: pw.CrossAxisAlignment.start,
+            children: [
+              _buildField('Combustível:', veiculo['combustivel'] ?? 'N/A', fontSize: fontSize),
+              _buildField('Cota:', veiculo['cota'] ?? 'N/A', fontSize: fontSize),
+              _buildField('Modelo:', veiculo['modelo'] ?? 'N/A', fontSize: fontSize),
+              _buildField('Placa:', veiculo['placa'] ?? 'N/A', fontSize: fontSize),
+              _buildField('Documento:', veiculo['documento'] ?? 'N/A', fontSize: fontSize),
+              pw.SizedBox(height: 10.0),
+            ],
+          ),
+      ],
+    );
+  }
+
+  pw.Widget _buildSignature(String title, pw.MemoryImage image) {
+    return pw.Column(
+      crossAxisAlignment: pw.CrossAxisAlignment.start,
+      children: [
+        pw.Text(
+          title,
+          style: pw.TextStyle(fontSize: 12.0, fontWeight: pw.FontWeight.bold),
+        ),
+        pw.Image(image, width: 150, height: 50),
+      ],
+    );
+  }
+
 
 
   @override

@@ -10,11 +10,18 @@ import 'package:pdf/widgets.dart' as pw;
 
 
 class RelatorioScreen extends StatelessWidget {
+
+  final List<Map<String, dynamic>> relatorios;
+  final Map<String, dynamic>? relatorioEspecifico; // Adicione este campo
+
+  RelatorioScreen({required this.relatorios, this.relatorioEspecifico}); // Atualize o construtor
+
   void _showReports(BuildContext context) {
     FirebaseFirestore.instance.collection('cadastros').get().then((querySnapshot) {
       List<Map<String, dynamic>> cadastros = querySnapshot.docs.map((documentSnapshot) {
         return {...documentSnapshot.data(), 'documentId': documentSnapshot.id};
       }).toList();
+
 
       showDialog(
         context: context,
@@ -435,4 +442,6 @@ class RelatorioScreen extends StatelessWidget {
       ),
     );
   }
+
+
 }

@@ -7,6 +7,9 @@ import 'dart:io';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+
 
 
 class RelatorioScreen extends StatelessWidget {
@@ -237,24 +240,25 @@ class RelatorioScreen extends StatelessWidget {
   }
 
 
-// Função para gerar e abrir o PDF
+
+  // Função para gerar e abrir o PDF
   Future<void> _generateAndOpenPDF(Map<String, dynamic> data) async {
     final pdf = pw.Document();
-
-    // Load images from the assets/images directory
-    final headerImage =
-    pw.MemoryImage((await rootBundle.load('assets/images/Sead_Sup.png')).buffer.asUint8List());
-    final footerImage =
-    pw.MemoryImage((await rootBundle.load('assets/images/Sead_inf.png')).buffer.asUint8List());
 
     // Get the current date and time
     final currentDate = DateTime.now();
     final formattedDate =
         "${currentDate.day} de ${_getMonthName(currentDate.month)} de ${currentDate.year} ${currentDate.hour}:${currentDate.minute}";
 
-    // Load signature images from assets
-    final signatureResponsavel = pw.MemoryImage((await rootBundle.load('assets/images/assinatura_responsavel.png')).buffer.asUint8List());
-    final signatureFiscal = pw.MemoryImage((await rootBundle.load('assets/images/assinatura_fiscal.png')).buffer.asUint8List());
+    // Load signature images from Firebase Storage
+    final signatureResponsavel = await _loadImageFromFirebaseStorage(data['assinaturaResponsavel']);
+    final signatureFiscal = await _loadImageFromFirebaseStorage(data['assinaturaFiscal']);
+
+    // Load images from the assets/images directory
+    final headerImage =
+    pw.MemoryImage((await rootBundle.load('assets/images/Sead_Sup.png')).buffer.asUint8List());
+    final footerImage =
+    pw.MemoryImage((await rootBundle.load('assets/images/Sead_inf.png')).buffer.asUint8List());
 
     // Ajuste a escala das imagens para torná-las maiores
     final double imageScale = 2.0; // Ajuste esse valor conforme necessário
@@ -313,6 +317,23 @@ class RelatorioScreen extends StatelessWidget {
     await OpenFile.open(file.path);
   }
 
+  Future<pw.MemoryImage> _loadImageFromFirebaseStorage(String imageUrl) async {
+    try {
+      final Reference reference = FirebaseStorage.instance.refFromURL(imageUrl);
+      final imgData = await reference.getData();
+      if (imgData != null) {
+        return pw.MemoryImage(Uint8List.fromList(imgData));
+      } else {
+        print('Erro ao carregar imagem do Firebase Storage: Imagem nula');
+        return pw.MemoryImage(Uint8List(0)); // Retorna uma imagem vazia em caso de erro
+      }
+    } catch (e) {
+      print('Erro ao carregar imagem do Firebase Storage: $e');
+      return pw.MemoryImage(Uint8List(0)); // Retorna uma imagem vazia em caso de erro
+    }
+  }
+
+
   pw.Widget _buildField(String label, String? value, {double fontSize = 10.0}) {
     return pw.Row(
       mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
@@ -331,7 +352,6 @@ class RelatorioScreen extends StatelessWidget {
     );
   }
 
-// Função para obter o nome do mês com base no número do mês
   String _getMonthName(int month) {
     final monthNames = [
       'Janeiro',
@@ -391,7 +411,6 @@ class RelatorioScreen extends StatelessWidget {
   }
 
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -443,5 +462,4 @@ class RelatorioScreen extends StatelessWidget {
     );
   }
 
-
-}
+} //final

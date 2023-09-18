@@ -289,4 +289,6 @@ class CustomFormField extends StatelessWidget {
       ],
     );
   }
-}
+
+} //final
+

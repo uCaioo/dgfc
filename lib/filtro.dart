@@ -113,4 +113,5 @@ class _FiltroScreenState extends State<FiltroScreen> {
     filtroController.dispose();
     super.dispose();
   }
-}
+
+} //final

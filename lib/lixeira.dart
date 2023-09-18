@@ -232,4 +232,5 @@ class LixeiraScreen extends StatelessWidget {
       print('Erro ao excluir permanentemente: $error');
     });
   }
-}
+
+} //final

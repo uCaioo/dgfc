@@ -84,4 +84,5 @@ class _LoadingScreenState extends State<LoadingScreen> {
   Widget build(BuildContext context) {
     return SplashScreen();
   }
-}
+
+} //final

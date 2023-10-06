@@ -18,6 +18,7 @@ class ConfirmacaoScreen extends StatelessWidget {
   final Uint8List assinatura2; // Adicione a segunda assinatura aqui
   final List<Map<String, String>> veiculos;
 
+
   ConfirmacaoScreen({
     required this.emissor,
     required this.para,

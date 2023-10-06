@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'adm.dart';
 import 'cadastro.dart'; // Importe o arquivo cadastro.dart
+import 'esqueceu.dart';
 
 class LoginScreen extends StatefulWidget {
   @override
@@ -129,7 +130,11 @@ class _LoginScreenState extends State<LoginScreen> {
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
                         TextButton(
-                          onPressed: () {},
+                          onPressed: () {
+                            Navigator.of(context).push(
+                              MaterialPageRoute(builder: (context) => EsqueceuSenhaScreen()), // Navega para a tela de cadastro
+                            );
+                          },
                           child: Text(
                             'Esqueceu a Senha?',
                             style: TextStyle(color: Color(0xFF43AD59)),

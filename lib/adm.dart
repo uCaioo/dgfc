@@ -28,91 +28,89 @@ class _AdmScreenState extends State<AdmScreen> {
       appBar: AppBar(
         title: Text('Painel de Administração'),
         backgroundColor: Color(0xFF202F58),
+        automaticallyImplyLeading: false,
+        centerTitle: true,
       ),
-      drawer: Drawer(
-        child: ListView(
-          children: [
-            Container(
-              color: Colors.white,
-              padding: EdgeInsets.symmetric(vertical: 20),
-              child: Center(
-                child: Image.asset('assets/images/DGFC.png', width: MediaQuery.of(context).size.width * 0.6),
-              ),
-            ),
-            SizedBox(height: 20),
-            ListTile(
-              leading: Icon(Icons.search, color: Color(0xFF43AD59)),
-              title: Text('Pesquisar', style: TextStyle(color: Color(0xFF202F58))),
-              onTap: () {/* Implementar ação de pesquisa */},
-            ),
-            SizedBox(height: 10),
-            ListTile(
-              leading: Icon(Icons.filter_list, color: Color(0xFF43AD59)),
-              title: Text('Filtrar', style: TextStyle(color: Color(0xFF202F58))),
-              onTap: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context) => FiltroScreen()));
-              },
-            ),
-
-            SizedBox(height: 10),
-            ListTile(
-              leading: Icon(Icons.bar_chart, color: Color(0xFF43AD59)),
-              title: Text('Relatórios', style: TextStyle(color: Color(0xFF202F58))),
-              onTap: () {
-                // Crie uma instância da tela RelatorioScreen e passe a lista de relatórios
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => RelatorioScreen(
-                      relatorios: [], // Passe uma lista vazia ou substitua por uma lista de relatórios se tiver uma
-                    ),
-                  ),
-                );
-              },
-            ),
 
 
-
-            SizedBox(height: 10),
-            ListTile(
-              leading: Icon(Icons.dashboard, color: Color(0xFF43AD59)),
-              title: Text('Dashboard', style: TextStyle(color: Color(0xFF202F58))),
-              onTap: () {/* Implementar ação do Dashboard */},
-            ),
-            SizedBox(height: 10),
-            ListTile(
-              leading: Icon(Icons.delete, color: Color(0xFF43AD59)),
-              title: Text('Lixeira', style: TextStyle(color: Color(0xFF202F58))),
-              onTap: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context) => LixeiraScreen()));
-              },
-            ),
-            SizedBox(height: 20),
-            ListTile(
-              leading: Icon(Icons.logout, color: Colors.red),
-              title: Text('Sair', style: TextStyle(color: Color(0xFF202F58))),
-              onTap: () {
-                _logout(context);
-              },
-            ),
-          ],
-        ),
-      ),
-      body: Center(
+      body: Container(
+        color: Color(0xFF202F58), // Cor de fundo da tela
+        padding: EdgeInsets.all(16.0),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text(
-              'Bem-vindo, ${widget.adminName}!',
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+              'Seja bem-vindo!',
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.white),
             ),
-            SizedBox(height: 20),
-            // Implementar campos de pesquisa e filtro aqui
+            SizedBox(height: 30),
+            GridView.count(
+              crossAxisCount: 3,
+              crossAxisSpacing: 16.0,
+              mainAxisSpacing: 16.0,
+              shrinkWrap: true,
+              children: [
+                _buildCard('Pesquisar', Icons.search, () {
+                  /* Implementar ação de pesquisa */
+                }),
+                _buildCard('Filtrar', Icons.filter_list, () {
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => FiltroScreen()));
+                }),
+                _buildCard('Relatórios', Icons.bar_chart, () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => RelatorioScreen(
+                        relatorios: [], // Passe uma lista vazia ou substitua por uma lista de relatórios se tiver uma
+                      ),
+                    ),
+                  );
+                }),
+                _buildCard('Dashboard', Icons.dashboard, () {
+                  /* Implementar ação do Dashboard */
+                }),
+                _buildCard('Lixeira', Icons.delete, () {
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => LixeiraScreen()));
+                }),
+                _buildCard('Sair', Icons.logout, () {
+                  _logout(context);
+                }),
+              ],
+            ),
           ],
         ),
       ),
     );
   }
 
-
-} //final
+  Widget _buildCard(String title, IconData icon, Function() onTap) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Card(
+        elevation: 5,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(
+                icon,
+                color: Color(0xFF43AD59),
+                size: 30,
+              ),
+              SizedBox(height: 10),
+              Text(
+                title,
+                style: TextStyle(color: Color(0xFF43AD59)),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+ //final

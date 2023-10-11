@@ -8,91 +8,113 @@ class EsqueceuSenhaScreen extends StatefulWidget {
 
 class _EsqueceuSenhaScreenState extends State<EsqueceuSenhaScreen> {
   final TextEditingController _emailController = TextEditingController();
+  final _emailFocusNode = FocusNode();
+  bool _isLoading = false;
+
+  @override
+  void dispose() {
+    _emailController.dispose();
+    _emailFocusNode.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
+    final screenHeight = MediaQuery.of(context).size.height;
+    final screenWidth = MediaQuery.of(context).size.width;
+
     return Scaffold(
-      backgroundColor: Color(0xFF202F58),
-      appBar: AppBar(
-        title: Text(
-          'Esqueceu a Senha',
-          style: TextStyle(color: Colors.white),
+      appBar: PreferredSize(
+        preferredSize: Size.fromHeight(60.0),
+        child: AppBar(
+          backgroundColor: Color(0xFF202F58),
+          elevation: 0.0,
+          leading: IconButton(
+            icon: Icon(Icons.arrow_back, color: Colors.white),
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+          ),
         ),
-        backgroundColor: Color(0xFF43AD59),
       ),
-
-
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          children: [
-            Expanded(
-              child: ListView(
+      body: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [Color(0xFF202F58), Color(0xFF0E1A38)],
+          ),
+        ),
+        child: Padding(
+          padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.1),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Column(
                 children: [
-                  Center(
-                    child: Image.asset(
-                      'assets/images/Logo_Governo.png',
-                      width: 200,
-                      height: 200,
+                  SizedBox(height: screenHeight * 0.06),
+                  Image.asset(
+                    'assets/images/Logo_Governo.png',
+                    width: screenWidth * 0.4,
+                    height: screenHeight * 0.2,
+                  ),
+                  SizedBox(height: screenHeight * 0.03),
+                  Container(
+                    padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.04),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(10),
                     ),
-                  ),
-                  SizedBox(height: 16.0),
-                  Text(
-                    'Digite seu Email',
-                    style: TextStyle(color: Colors.white, fontSize: 18),
-                    textAlign: TextAlign.center,
-                  ),
-
-
-                  SizedBox(height: 8.0),
-                  TextFormField(
-                    controller: _emailController,
-                    style: TextStyle(color: Colors.white),
-                    decoration: InputDecoration(
-                      filled: true,
-                      fillColor: Colors.white.withOpacity(0.2),
-                      labelText: 'Email',
-                      labelStyle: TextStyle(color: Colors.white),
-                      focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Color(0xFF43AD59), width: 2.0),
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      enabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.white.withOpacity(0.8), width: 2.0),
-                        borderRadius: BorderRadius.circular(10),
+                    child: TextFormField(
+                      controller: _emailController,
+                      focusNode: _emailFocusNode,
+                      style: TextStyle(color: Colors.black),
+                      decoration: InputDecoration(
+                        labelText: 'Email',
+                        labelStyle: TextStyle(color: Colors.black),
+                        prefixIcon: Icon(Icons.email, color: Color(0xFF43AD59)),
+                        border: InputBorder.none,
                       ),
                     ),
                   ),
-                  SizedBox(height: 16.0), // Adicionado espaço vertical
+                  SizedBox(height: screenHeight * 0.02),
                 ],
               ),
-            ),
-
-
-            ElevatedButton(
-              onPressed: () {
-                _enviarEmailRedefinicaoSenha(context);
-              },
-              style: ElevatedButton.styleFrom(
-                primary: Color(0xFF43AD59),
-                onPrimary: Colors.white,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(16),
+              Container(
+                width: double.infinity,
+                padding: EdgeInsets.symmetric(vertical: 16.0),
+                child: ElevatedButton(
+                  onPressed: _isLoading ? null : () => _enviarEmailRedefinicaoSenha(context),
+                  style: ElevatedButton.styleFrom(
+                    primary: Color(0xFF43AD59),
+                    onPrimary: Colors.white,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    elevation: 5,
+                    padding: EdgeInsets.symmetric(vertical: screenHeight * 0.016, horizontal: screenWidth * 0.1),
+                  ),
+                  child: _isLoading
+                      ? CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(Colors.white))
+                      : Text(
+                    'Enviar Email de Redefinição',
+                    style: TextStyle(fontSize: 18),
+                  ),
                 ),
-                padding: EdgeInsets.symmetric(vertical: 16.0, horizontal: 20.0),
               ),
-              child: Text(
-                'Enviar Email de Redefinição',
-                style: TextStyle(fontSize: 18),
-              ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
   }
 
   Future<void> _enviarEmailRedefinicaoSenha(BuildContext context) async {
+    setState(() {
+      _isLoading = true;
+    });
+
     final String email = _emailController.text.trim();
 
     try {
@@ -113,8 +135,6 @@ class _EsqueceuSenhaScreenState extends State<EsqueceuSenhaScreen> {
               style: TextStyle(color: Color(0xFF43AD59)),
               textAlign: TextAlign.center,
             ),
-
-
             actions: [
               TextButton(
                 onPressed: () {
@@ -126,8 +146,6 @@ class _EsqueceuSenhaScreenState extends State<EsqueceuSenhaScreen> {
           );
         },
       );
-
-
     } catch (e) {
       print('Erro ao enviar e-mail de redefinição de senha: $e');
       showDialog(
@@ -155,7 +173,10 @@ class _EsqueceuSenhaScreenState extends State<EsqueceuSenhaScreen> {
           );
         },
       );
+    } finally {
+      setState(() {
+        _isLoading = false;
+      });
     }
   }
-
 }

@@ -33,13 +33,21 @@ class _LoginScreenState extends State<LoginScreen> {
     } catch (e) {
       print("Erro de autenticação: $e");
 
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text("Usuário ou senha incorretos"),
-          duration: Duration(seconds: 2),
-        ),
-      );
+      // Mostrar mensagem de erro na parte superior da tela
+      showErrorSnackbar(context, "Usuário ou senha incorretos");
     }
+  }
+
+  // Método para mostrar a mensagem de erro na parte superior da tela
+  void showErrorSnackbar(BuildContext context, String errorMessage) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(errorMessage),
+        duration: Duration(seconds: 2),
+        behavior: SnackBarBehavior.floating, // Permite que o SnackBar flutue sobre outros widgets
+        margin: EdgeInsets.all(16.0), // Ajuste as margens conforme necessário
+      ),
+    );
   }
 
   @override
@@ -53,8 +61,18 @@ class _LoginScreenState extends State<LoginScreen> {
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
+      appBar: AppBar(
+        backgroundColor: Color(0xFF202F58),
+        elevation: 0,
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back),
+          onPressed: () {
+            Navigator.of(context).pop(); // Volta para a tela anterior
+          },
+        ),
+      ),
       body: Builder(
-        builder: (BuildContext scaffoldContext) { // Use o contexto do Scaffold
+        builder: (BuildContext scaffoldContext) {
           return Container(
             decoration: BoxDecoration(
               gradient: LinearGradient(
@@ -145,7 +163,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     SizedBox(height: screenHeight * 0.04),
                     ElevatedButton(
                       onPressed: () {
-                        signInWithEmailAndPassword(scaffoldContext); // Passe o contexto do Scaffold
+                        signInWithEmailAndPassword(scaffoldContext);
                       },
                       style: ElevatedButton.styleFrom(
                         primary: Color(0xFF43AD59),

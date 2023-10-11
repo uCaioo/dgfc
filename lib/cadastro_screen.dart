@@ -123,7 +123,10 @@ class _CadastroScreenState extends State<CadastroScreen> {
                     ...dropdownOptions.map((option) {
                       return DropdownMenuItem<String>(
                         value: option,
-                        child: Text(option),
+                        child: Text(
+                          option,
+                          style: TextStyle(fontSize: 12), // Ajuste o tamanho da fonte conforme necessário
+                        ),
                       );
                     }).toList(),
                   ],
@@ -140,8 +143,9 @@ class _CadastroScreenState extends State<CadastroScreen> {
                       horizontal: 10.0,
                     ),
                   ),
-                  isExpanded: true, // Define o botão para expandir horizontalmente
+                  isExpanded: true,
                 )
+
                     : TextFormField(
                   onChanged: onChanged,
                   initialValue: value,
@@ -160,6 +164,8 @@ class _CadastroScreenState extends State<CadastroScreen> {
                   ),
                 ),
               ),
+
+
               SizedBox(width: 16.0), // Espaço para separar os ícones do campo
             ],
           ),
@@ -189,7 +195,7 @@ class _CadastroScreenState extends State<CadastroScreen> {
     'CONSELHO DE DESENVOLVIMENTO DO ESTADO DO AMAZONAS – CODAM',
     'CONTROLADORIA GERAL DO ESTADO – CGE',
     'CORPO DE BOMBEIROS MILITAR DO ESTADO DO AMAZONAS – CBMAM',
-    'DEPARTAMENTO ESTADUAL DE TR NSITO – DETRAN',
+    'DEPARTAMENTO ESTADUAL DE TRÂNSITO – DETRAN',
     'EMPRESA ESTADUAL DE TURISMO – AMAZONASTUR',
     'ESCRITÓRIO DE REPRESENTAÇÃO DO GOVERNO, EM SÃO PAULO – ERGSP',
     'FUNDAÇÃO CENTRO DE CONTROLE DE ONCOLOGIA DO ESTADO DO AMAZONAS – FCECON',

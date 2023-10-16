@@ -40,20 +40,20 @@ flutter:
     - assets/images/Sead_inf.png
     - assets/images/Sead_Sup.png
     - assets/images/car.png
-    - assets/images/DGFC.png
+    - assets/images/DGFC.jpg
 
 flutter_launcher_icons:
   android: true
   ios: true
-  image_path: "assets/images/DGFC.png"
+  image_path: "assets/images/DGFC.jpg"
   web:
     generate: true
-    image_path: "assets/images/DGFC.png"
+    image_path: "assets/images/DGFC.jpg"
     background_color: "#hexcode"
     theme_color: "#hexcode"
   windows:
     generate: true
-    image_path: "assets/images/DGFC.png"
+    image_path: "assets/images/DGFC.jpg"
   macos:
     generate: true
-    image_path: "assets/images/DGFC.png"
+    image_path: "assets/images/DGFC.jpg"

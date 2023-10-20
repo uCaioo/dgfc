@@ -298,7 +298,7 @@ class ConfirmacaoScreen extends StatelessWidget {
                                   return imageUrl;
                                 }
 
-// Verificar se o usuário confirmou
+                                // Verificar se o usuário confirmou
                                 if (confirm == true) {
                                   // Mostrar a animação de carregamento
                                   showDialog(

@@ -182,7 +182,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
-                          'Não tem uma conta? ',
+                          'Não tem uma conta?',
                           style: TextStyle(color: Colors.white),
                         ),
                         TextButton(

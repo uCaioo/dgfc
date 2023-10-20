@@ -39,7 +39,7 @@ flutter:
     - assets/images/Sead_inf.png
     - assets/images/Sead_Sup.png
     - assets/images/car.png
-    - assets/images/DGFC.jpg
+    - assets/images/DGFC.png
 
 flutter_launcher_icons:
   android: true

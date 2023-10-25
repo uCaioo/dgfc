@@ -10,32 +10,39 @@ class LixeiraScreen extends StatelessWidget {
       appBar: AppBar(
         title: Text(
           'Lixeira',
-          style: TextStyle(color: Colors.white),
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 20, // Tamanho do título
+          ),
         ),
+        centerTitle: true, // Centraliza o título
         backgroundColor: Color(0xFF202F58),
       ),
-      body: FutureBuilder<QuerySnapshot<Map<String, dynamic>>>(
-        future: FirebaseFirestore.instance.collection('lixeira').get(),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(child: CircularProgressIndicator());
-          } else if (snapshot.hasError) {
-            return Center(child: Text('Erro ao buscar itens da lixeira.'));
-          } else if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
-            return Center(child: Text('A lixeira está vazia.'));
-          } else {
-            List<Map<String, dynamic>> lixeiraItens = snapshot.data!.docs.map((documentSnapshot) {
-              return {...documentSnapshot.data(), 'documentId': documentSnapshot.id};
-            }).toList();
+      body: Container(
+        color: Color(0xFF202F58), // Cor de fundo para toda a tela
+        child: FutureBuilder<QuerySnapshot<Map<String, dynamic>>>(
+          future: FirebaseFirestore.instance.collection('lixeira').get(),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return Center(child: CircularProgressIndicator());
+            } else if (snapshot.hasError) {
+              return Center(child: Text('Erro ao buscar itens da lixeira.'));
+            } else if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+              return Center(child: Text('A lixeira está vazia.'));
+            } else {
+              List<Map<String, dynamic>> lixeiraItens = snapshot.data!.docs.map((documentSnapshot) {
+                return {...documentSnapshot.data(), 'documentId': documentSnapshot.id};
+              }).toList();
 
-            return ListView.builder(
-              itemCount: lixeiraItens.length,
-              itemBuilder: (context, index) {
-                return _buildTrashItem(context, lixeiraItens[index]);
-              },
-            );
-          }
-        },
+              return ListView.builder(
+                itemCount: lixeiraItens.length,
+                itemBuilder: (context, index) {
+                  return _buildTrashItem(context, lixeiraItens[index]);
+                },
+              );
+            }
+          },
+        ),
       ),
     );
   }
@@ -119,7 +126,6 @@ class LixeiraScreen extends StatelessWidget {
       ),
     );
   }
-
 
   void _showTrashItemOptions(BuildContext context, Map<String, dynamic> item) {
     showDialog(
@@ -232,5 +238,4 @@ class LixeiraScreen extends StatelessWidget {
       print('Erro ao excluir permanentemente: $error');
     });
   }
-
-} //final
+}

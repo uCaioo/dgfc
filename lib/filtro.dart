@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'relatorio.dart';
 
 class FiltroScreen extends StatefulWidget {
   @override
@@ -35,7 +36,7 @@ class _FiltroScreenState extends State<FiltroScreen> {
 
         final String nomeResponsavel =
         cadastro['nomeResponsavel'] != null ? cadastro['nomeResponsavel'].toString().toLowerCase() : '';
-         
+
         final String unidadeRecebedora =
         cadastro['unidadeRecebedora'] != null ? cadastro['unidadeRecebedora'].toString().toLowerCase() : '';
 
@@ -185,8 +186,17 @@ class _FiltroScreenState extends State<FiltroScreen> {
           ],
         ),
         onTap: () {
-          // Implemente o que acontece quando um relatório é pressionado, se necessário
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => RelatorioScreen(
+                relatorios: filteredReports,
+              ),
+            ),
+          );
         },
+
+
       ),
     );
   }

@@ -34,15 +34,16 @@ class RelatorioScreen extends StatelessWidget {
             content: Container(
               width: MediaQuery.of(context).size.width * 0.8,
               child: ListView.builder(
-                itemCount: cadastros.length,
+                itemCount: cadastros.length, // Usar 'cadastros' em vez de 'relatorios'
                 itemBuilder: (context, index) {
-                  return _buildReportEntry(context, cadastros[index]);
+                  return _buildReportEntry(context, cadastros[index]); // Usar 'cadastros' em vez de 'relatorios'
                 },
               ),
             ),
           );
         },
       );
+
     }).catchError((error) {
       print('Erro ao buscar relatórios: $error');
     });
@@ -416,17 +417,19 @@ class RelatorioScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text('Relatórios'),
+        centerTitle: true, // Isso centraliza o título na AppBar
         backgroundColor: Color(0xFF202F58),
       ),
+      backgroundColor: Color(0xFF202F58), // Cor de fundo para toda a tela
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Card(
-              color: Color(0xFF43AD59), // Cor #43AD59
-              elevation: 4, // Elevação do card
+              color: Color(0xFF43AD59), // Cor do Card
+              elevation: 4,
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(8), // Borda arredondada
+                borderRadius: BorderRadius.circular(8),
               ),
               child: InkWell(
                 onTap: () {
@@ -438,11 +441,11 @@ class RelatorioScreen extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Icon(
-                        Icons.description, // Ícone de relatório
+                        Icons.description,
                         color: Colors.white,
-                        size: 32, // Tamanho do ícone
+                        size: 32,
                       ),
-                      SizedBox(height: 8), // Espaçamento entre o ícone e o texto
+                      SizedBox(height: 8),
                       Text(
                         'Mostrar Relatórios',
                         style: TextStyle(
@@ -461,5 +464,6 @@ class RelatorioScreen extends StatelessWidget {
       ),
     );
   }
+
 
 } //final

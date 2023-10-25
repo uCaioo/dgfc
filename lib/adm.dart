@@ -3,6 +3,8 @@ import 'filtro.dart';
 import 'lixeira.dart';
 import 'relatorio.dart';
 import 'login.dart';
+import 'notificacoes.dart';
+import 'dashboard.dart';
 
 class AdmScreen extends StatefulWidget {
   final String adminName;
@@ -49,8 +51,8 @@ class _AdmScreenState extends State<AdmScreen> {
                 mainAxisSpacing: 16.0,
                 shrinkWrap: true,
                 children: [
-                  _buildCard('Avisos', Icons.warning, () {
-                    /* Implementar ação de pesquisa */
+                  _buildCard('Notificações', Icons.message, () {
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => NotificacoesScreen()));
                   }),
                   _buildCard('Pesquisar', Icons.search, () {
                     Navigator.push(context,
@@ -67,7 +69,7 @@ class _AdmScreenState extends State<AdmScreen> {
                     );
                   }),
                   _buildCard('Dashboard', Icons.dashboard, () {
-                    /* Implementar ação do Dashboard */
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => DashboardScreen()));
                   }),
                   _buildCard('Lixeira', Icons.delete, () {
                     Navigator.push(context,
@@ -75,7 +77,7 @@ class _AdmScreenState extends State<AdmScreen> {
                   }),
                   _buildCard('Sair', Icons.logout, () {
                     _logout(context);
-                  }),
+                  }, Colors.red), // Ícone vermelho
                 ],
               ),
             ),
@@ -85,7 +87,7 @@ class _AdmScreenState extends State<AdmScreen> {
     );
   }
 
-  Widget _buildCard(String title, IconData icon, Function() onTap) {
+  Widget _buildCard(String title, IconData icon, Function() onTap, [Color? iconColor]) {
     return GestureDetector(
       onTap: onTap,
       child: Container(
@@ -104,7 +106,7 @@ class _AdmScreenState extends State<AdmScreen> {
               children: [
                 Icon(
                   icon,
-                  color: Color(0xFF43AD59),
+                  color: iconColor ?? Color(0xFF43AD59), // Cor padrão ou a cor passada como argumento
                   size: 24,
                 ),
                 SizedBox(height: 8),

@@ -6,6 +6,8 @@ import 'dart:io';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
+import 'welcome_screen.dart';
+
 
 class AgradecimentoScreen extends StatelessWidget {
   final String emissor;
@@ -88,6 +90,28 @@ class AgradecimentoScreen extends StatelessWidget {
                   minimumSize: Size(200, 0),
                 ),
               ),
+              SizedBox(height: 20),
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => WelcomeScreen()), // Substitua SelectScreen pelo nome da tela desejada
+                  );
+                },
+                child: Text(
+                  'Realizar Outro Cadastro',
+                  style: TextStyle(
+                    fontFamily: 'Arial',
+                    fontSize: 18.0,
+                  ),
+                ),
+                style: ElevatedButton.styleFrom(
+                  primary: Color(0xFF3366CC), // Cor desejada
+                  padding: EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                  minimumSize: Size(200, 0),
+                ),
+              ),
+
               SizedBox(height: 20),
               ElevatedButton(
                 onPressed: () {

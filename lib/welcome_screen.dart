@@ -84,6 +84,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> with TickerProviderStateM
               title: Text('Bem-vindo'),
               backgroundColor: Color(0xFF202F58),
               automaticallyImplyLeading: false, // Impede que o botão de voltar padrão seja exibido
+              centerTitle: true, // Centraliza o título
               leading: IconButton(
                 icon: Icon(Icons.arrow_back),
                 onPressed: () {
@@ -91,6 +92,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> with TickerProviderStateM
                 },
               ),
             ),
+
             Center(
               child: Padding(
                 padding: EdgeInsets.all(20.0),

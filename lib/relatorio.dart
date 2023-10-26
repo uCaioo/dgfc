@@ -12,12 +12,30 @@ import 'package:firebase_storage/firebase_storage.dart';
 
 
 
-class RelatorioScreen extends StatelessWidget {
-
+class RelatorioScreen extends StatefulWidget {
   final List<Map<String, dynamic>> relatorios;
-  final Map<String, dynamic>? relatorioEspecifico; // Adicione este campo
+  final Map<String, dynamic>? relatorioEspecifico;
 
-  RelatorioScreen({required this.relatorios, this.relatorioEspecifico}); // Atualize o construtor
+  RelatorioScreen({required this.relatorios, this.relatorioEspecifico});
+
+  @override
+  _RelatorioScreenState createState() => _RelatorioScreenState();
+}
+
+class _RelatorioScreenState extends State<RelatorioScreen> {
+  late TextEditingController _searchController;
+
+  @override
+  void initState() {
+    super.initState();
+    _searchController = TextEditingController();
+  }
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
+  }
 
   void _showReports(BuildContext context) {
     FirebaseFirestore.instance.collection('cadastros').get().then((querySnapshot) {
@@ -25,25 +43,34 @@ class RelatorioScreen extends StatelessWidget {
         return {...documentSnapshot.data(), 'documentId': documentSnapshot.id};
       }).toList();
 
-
       showDialog(
         context: context,
         builder: (context) {
           return AlertDialog(
-            title: Text('Relatórios'),
+            title: Padding(
+              padding: EdgeInsets.all(20.0),
+              child: Text(
+                'Relatórios',
+                textAlign: TextAlign.center,
+              ),
+            ),
             content: Container(
               width: MediaQuery.of(context).size.width * 0.8,
               child: ListView.builder(
-                itemCount: cadastros.length, // Usar 'cadastros' em vez de 'relatorios'
+                itemCount: cadastros.length,
                 itemBuilder: (context, index) {
-                  return _buildReportEntry(context, cadastros[index]); // Usar 'cadastros' em vez de 'relatorios'
+                  return Column(
+                    children: [
+                      _buildReportEntry(context, cadastros[index]),
+                      if (index < cadastros.length - 1) Divider(),
+                    ],
+                  );
                 },
               ),
             ),
           );
         },
       );
-
     }).catchError((error) {
       print('Erro ao buscar relatórios: $error');
     });
@@ -92,7 +119,6 @@ class RelatorioScreen extends StatelessWidget {
                 SizedBox(height: 16),
                 ElevatedButton(
                   onPressed: () async {
-                    // Mostrar diálogo de confirmação
                     bool confirmDelete = await showDialog(
                       context: context,
                       builder: (context) {
@@ -102,13 +128,13 @@ class RelatorioScreen extends StatelessWidget {
                           actions: [
                             TextButton(
                               onPressed: () {
-                                Navigator.pop(context, false); // Não confirmar
+                                Navigator.pop(context, false);
                               },
                               child: Text('Não'),
                             ),
                             TextButton(
                               onPressed: () {
-                                Navigator.pop(context, true); // Confirmar
+                                Navigator.pop(context, true);
                               },
                               child: Text('Sim'),
                             ),
@@ -119,11 +145,11 @@ class RelatorioScreen extends StatelessWidget {
 
                     if (confirmDelete == true) {
                       _deleteReport(data['documentId']);
-                      Navigator.pop(context); // Feche o diálogo de detalhes
+                      Navigator.pop(context);
                     }
                   },
                   style: ElevatedButton.styleFrom(
-                    primary: Colors.red, // Define a cor de fundo como vermelho
+                    primary: Colors.red,
                   ),
                   child: Text('Excluir Relatório', style: TextStyle(color: Colors.white)),
                 ),
@@ -139,11 +165,10 @@ class RelatorioScreen extends StatelessWidget {
             ),
             TextButton(
               onPressed: () async {
-                _generateAndOpenPDF(data); // Chamando a função para gerar e abrir o PDF
+                _generateAndOpenPDF(data);
               },
               child: Text('Visualizar PDF', style: TextStyle(color: Color(0xFF43AD59))),
             ),
-
           ],
         );
       },
@@ -239,7 +264,6 @@ class RelatorioScreen extends StatelessWidget {
       }
     });
   }
-
 
 
   // Função para gerar e abrir o PDF
@@ -464,6 +488,5 @@ class RelatorioScreen extends StatelessWidget {
       ),
     );
   }
-
 
 } //final

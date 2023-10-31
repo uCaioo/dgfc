@@ -71,6 +71,7 @@ class _LoginScreenState extends State<LoginScreen> {
           },
         ),
       ),
+
       body: Builder(
         builder: (BuildContext scaffoldContext) {
           return Container(
@@ -81,6 +82,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 colors: [Color(0xFF202F58), Color(0xFF0E1A38)],
               ),
             ),
+
             child: Center(
               child: Padding(
                 padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.1),
@@ -93,6 +95,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       width: screenWidth * 0.4,
                       height: screenHeight * 0.2,
                     ),
+
                     SizedBox(height: screenHeight * 0.06),
                     Container(
                       padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.04),
@@ -100,6 +103,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         color: Colors.white,
                         borderRadius: BorderRadius.circular(10),
                       ),
+
                       child: TextFormField(
                         controller: _emailController,
                         focusNode: _emailFocusNode,
@@ -198,6 +202,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                       ],
                     ),
+
                     SizedBox(height: screenHeight * 0.08),
                     Text(
                       'Departamento de Gestão de Frotas e Combustível DGFC/SEAD',

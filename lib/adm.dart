@@ -7,11 +7,13 @@ import 'notificacoes.dart';
 import 'dashboard.dart';
 
 class AdmScreen extends StatefulWidget {
+
   final String adminName;
+
   AdmScreen({required this.adminName});
 
   @override
-  _AdmScreenState createState() => _AdmScreenState();
+  _AdmScreenState createState() => _AdmScreenState ();
 }
 
 class _AdmScreenState extends State<AdmScreen> {

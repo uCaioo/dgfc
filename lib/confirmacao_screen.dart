@@ -38,7 +38,7 @@ class ConfirmacaoScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text('Confirmação de Cadastro'),
-        backgroundColor: Color(0xFF43AD59),
+        backgroundColor: Color(0xFF202F58),
       ),
       body: Container(
         color: Color(0xFF202F58), // Cor de fundo para cobrir o espaço em branco

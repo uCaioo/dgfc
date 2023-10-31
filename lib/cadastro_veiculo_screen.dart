@@ -60,7 +60,7 @@ class _CadastroVeiculoScreenState extends State<CadastroVeiculoScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Cadastro de Veículo'),
-        backgroundColor: Color(0xFF43AD59),
+        backgroundColor: Color(0xFF202F58),
       ),
       body: Container(
         color: Color(0xFF202F58),

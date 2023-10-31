@@ -307,18 +307,18 @@ class _RelatorioScreenState extends State<RelatorioScreen> {
             children: [
               pw.Text('Comprovante de Cadastro', style: pw.TextStyle(fontSize: 16.0, fontWeight: pw.FontWeight.bold)),
               pw.SizedBox(height: 16.0),
-              _buildField('Emissor:', data['emissor'], fontSize: fieldFontSize),
-              _buildField('Para:', data['para'], fontSize: fieldFontSize),
-              _buildField('Unidade Recebedora:', data['unidadeRecebedora'], fontSize: fieldFontSize),
-              _buildField('Cidade:', data['cidade'], fontSize: fieldFontSize),
-              _buildField('Nome do Responsável:', data['nomeResponsavel'], fontSize: fieldFontSize),
-              _buildField('Matrícula:', data['matricula'], fontSize: fieldFontSize),
+              _buildField('Emissor: ', data['emissor'], fontSize: fieldFontSize),
+              _buildField('Para: ', data['para'], fontSize: fieldFontSize),
+              _buildField('Unidade Recebedora: ', data['unidadeRecebedora'], fontSize: fieldFontSize),
+              _buildField('Cidade:', data['cidade '], fontSize: fieldFontSize),
+              _buildField('Nome do Responsável: ', data['nomeResponsavel'], fontSize: fieldFontSize),
+              _buildField('Matrícula: ', data['matricula'], fontSize: fieldFontSize),
               pw.SizedBox(height: 16.0),
               _buildField('Data e Hora:', formattedDate, fontSize: fieldFontSize),
               pw.SizedBox(height: 16.0),
               // Adicione as assinaturas aqui
-              _buildSignature('Assinatura Responsável', signatureResponsavel),
-              _buildSignature('Assinatura Fiscal', signatureFiscal),
+              _buildSignature('Assinatura Responsável:', signatureResponsavel),
+              _buildSignature('Assinatura Fiscal:', signatureFiscal),
               pw.SizedBox(height: 16.0),
               _buildVeiculosPDF(data['veiculos'], fontSize: fieldFontSize),
               pw.SizedBox(height: 16.0),
@@ -328,14 +328,15 @@ class _RelatorioScreenState extends State<RelatorioScreen> {
                 child: pw.Image(footerImage, width: 300 * imageScale, height: 100 * imageScale),
               ),
             ],
-          ),
+          )
+
         ],
       ),
     );
 
     // Salve o PDF em um arquivo temporário
     final output = await getTemporaryDirectory();
-    final file = File("${output.path}/relatorio.pdf");
+    final file = File("${output.path}/relatorio_DGFC.pdf");
     await file.writeAsBytes(await pdf.save());
 
     // Abra o PDF no dispositivo
@@ -410,11 +411,11 @@ class _RelatorioScreenState extends State<RelatorioScreen> {
           pw.Column(
             crossAxisAlignment: pw.CrossAxisAlignment.start,
             children: [
-              _buildField('Combustível:', veiculo['combustivel'] ?? 'N/A', fontSize: fontSize),
-              _buildField('Cota:', veiculo['cota'] ?? 'N/A', fontSize: fontSize),
-              _buildField('Modelo:', veiculo['modelo'] ?? 'N/A', fontSize: fontSize),
-              _buildField('Placa:', veiculo['placa'] ?? 'N/A', fontSize: fontSize),
-              _buildField('Documento:', veiculo['documento'] ?? 'N/A', fontSize: fontSize),
+              _buildField('Placa: ', veiculo['placa'] ?? 'N/A', fontSize: fontSize),
+              _buildField('Modelo: ', veiculo['modelo'] ?? 'N/A', fontSize: fontSize),
+              _buildField('Cota: ', veiculo['cota'] ?? 'N/A', fontSize: fontSize),
+              _buildField('Combustível: ', veiculo['combustivel'] ?? 'N/A', fontSize: fontSize),
+              _buildField('Documento: ', veiculo['documento'] ?? 'N/A', fontSize: fontSize),
               pw.SizedBox(height: 10.0),
             ],
           ),

@@ -106,7 +106,7 @@ class SelectScreen extends StatelessWidget {
     // Layout personalizado para telas largas (tablets)
     return Center(
       child: Text(
-        'Layout personalizado para telas largas',
+        'Posicione seu dispositivo na vertical',
         style: TextStyle(
           fontSize: 20,
           fontWeight: FontWeight.bold,
@@ -115,6 +115,7 @@ class SelectScreen extends StatelessWidget {
       ),
     );
   }
+
 
   Widget _buildOptionCard(BuildContext context, String title, IconData iconData, Color cardColor, Color textColor, VoidCallback onTap) {
     return GestureDetector(
@@ -131,11 +132,13 @@ class SelectScreen extends StatelessWidget {
                 size: 80,
                 color: textColor,
               ),
+
               SizedBox(height: 12),
               Text(
                 title,
                 style: TextStyle(color: textColor, fontSize: 18, fontWeight: FontWeight.bold),
               ),
+
             ],
           ),
         ),

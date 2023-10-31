@@ -74,6 +74,7 @@ class LixeiraScreen extends StatelessWidget {
             ],
           ),
         ),
+
         subtitle: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -93,6 +94,7 @@ class LixeiraScreen extends StatelessWidget {
                 ],
               ),
             ),
+
             RichText(
               text: TextSpan(
                 text: 'Órgão: ',
@@ -111,9 +113,11 @@ class LixeiraScreen extends StatelessWidget {
             ),
           ],
         ),
+
         onTap: () {
           _showTrashItemOptions(context, item);
         },
+
         contentPadding: EdgeInsets.symmetric(vertical: 16, horizontal: 20),
         leading: Icon(
           Icons.restore,

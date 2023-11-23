@@ -8,6 +8,7 @@ class SelectScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         title: Container(
           width: double.infinity,
           child: Text(

@@ -336,7 +336,7 @@ class _RelatorioScreenState extends State<RelatorioScreen> {
 
     // Salve o PDF em um arquivo temporário
     final output = await getTemporaryDirectory();
-    final file = File("${output.path}/relatorio_DGFC.pdf");
+    final file = File("${output.path}/comprovante_DGFC_SEAD.pdf");
     await file.writeAsBytes(await pdf.save());
 
     // Abra o PDF no dispositivo

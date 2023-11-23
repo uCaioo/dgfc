@@ -6,7 +6,7 @@ import 'dart:io';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
-import 'welcome_screen.dart';
+import 'select.dart';
 
 
 class AgradecimentoScreen extends StatelessWidget {
@@ -93,13 +93,13 @@ class AgradecimentoScreen extends StatelessWidget {
               SizedBox(height: 20),
               ElevatedButton(
                 onPressed: () {
-                  Navigator.push(
+                  Navigator.pushReplacement(
                     context,
-                    MaterialPageRoute(builder: (context) => WelcomeScreen()), // Substitua SelectScreen pelo nome da tela desejada
+                    MaterialPageRoute(builder: (context) => SelectScreen()), // Substitua SelectScreen pelo nome da tela desejada
                   );
                 },
                 child: Text(
-                  'Realizar Outro Cadastro',
+                  'Ir para a tela inicial',
                   style: TextStyle(
                     fontFamily: 'Arial',
                     fontSize: 18.0,
@@ -111,6 +111,7 @@ class AgradecimentoScreen extends StatelessWidget {
                   minimumSize: Size(200, 0),
                 ),
               ),
+
 
               SizedBox(height: 20),
               ElevatedButton(
@@ -213,7 +214,7 @@ class AgradecimentoScreen extends StatelessWidget {
                       style: pw.TextStyle(
                         fontSize: 18.0,
                         fontWeight: pw.FontWeight.bold,
-                        color: PdfColors.green,
+                        color: PdfColors.black,
                       ),
                     ),
                     pw.SizedBox(height: 8.0),
